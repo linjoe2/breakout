@@ -73,8 +73,7 @@ function draw() {
 		colour = colours[Math.floor(Math.random() * 10)]
 	} else if(y + dy > canvas.height-ballRadius) {
         if(x > paddleX && x < paddleX + paddleWidth) {
-            dy = -dy;
-            speed += 1000;
+            dy = -dy * 1.05
         } else {
             alert("Game over! :( ")
             document.location.reload();    
