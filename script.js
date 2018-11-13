@@ -3,6 +3,7 @@ var ctx = canvas.getContext('2d');
 
 var speed = 10;
 var score = 0;
+var lives = 3;
 
 //variables for ball
 var x = canvas.width/2
@@ -43,6 +44,7 @@ for(var i = 0; i < brickColumnCount; i++) {
 //check keypresses
 document.addEventListener("keydown", keyDown, false);
 document.addEventListener("keyup", keyUp, false);
+document.addEventListener("mousemove", mouseMove, false);
 
 function keyDown(key) {
 	if(key.keyCode == 37) {
@@ -60,6 +62,13 @@ function keyUp(key) {
 	else if(key.keyCode == 39) {
 		rightkey = false;
 	} 
+}
+
+function mouseMove(mouse) {
+    var relativeX = mouse.clientX - canvas.offsetLeft;
+    if(relativeX > 0 && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth/2;
+    }
 }
 
 //drawing on the canvas
@@ -127,6 +136,11 @@ function keepScore() {
     ctx.fillText("Score: " + score, 8, 20)
 }
 
+function countLives() {
+    ctx.font = "16px Verdana";
+    ctx.fillStyle = colour;
+    ctx.fillText("Lives: "+ lives, canvas.width-65, 20)
+}
 
 //make the ball move
 function draw() {
@@ -135,6 +149,7 @@ function draw() {
 	drawBall();
 	drawPaddle();
     keepScore();
+    countLives();
     collisionDetection();
 
 	//check if ball hits border and change direction
@@ -144,8 +159,17 @@ function draw() {
         if(x > paddleX && x < paddleX + paddleWidth) {
             dy = -dy
         } else {
-            alert(`Game over! :(. You got ${score} points`)
-            document.location.reload();    
+            lives--;
+            if(lives === 0) {
+                alert(`Game over! :(. You got ${score} points`)
+                document.location.reload();   
+            } else {
+                x = canvas.width/2;
+                y = canvas.height-30;
+                dx = 2;
+                dy = -2;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
         }
     }
 
@@ -164,9 +188,11 @@ function draw() {
 	x += dx;
 	y += dy;
 
+    requestAnimationFrame(draw);
+
 }
 
-setInterval(draw, speed)
+draw();
 
 
 
