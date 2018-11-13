@@ -116,7 +116,7 @@ function collisionDetection() {
             var brick = bricks[i][j];
             if(brick.on === true) {
                 if(x > brick.x && x < (brick.x+brickWidth) && y > brick.y && y < (brick.y+brickHeight)) {
-                    dy = -dy * 1.05;
+                    dy = -dy * 1.1;
                     brick.on = false;
                     score++
                     if(score === brickRowCount * brickColumnCount) {
